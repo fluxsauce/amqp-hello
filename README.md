@@ -17,6 +17,8 @@ The RabbitMQ Management Plugin will be at [http://localhost:15672](http://localh
 
 ## Usage
 
+### Work Queue
+
 Create tasks:
 
 ```bash
@@ -33,4 +35,18 @@ Start worker:
 
 ```bash
 ./index.js worker
+```
+
+### Publish/Subscribe
+
+Emit log:
+
+```bash
+./index.js emit_log
+```
+
+Receive logs:
+
+```bash
+./index.js receive_logs
 ```

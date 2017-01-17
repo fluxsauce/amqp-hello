@@ -8,17 +8,27 @@ if (process.version.split('.')[0].replace('v', '') < 6) {
 
 const task = require('./lib/task');
 const worker = require('./lib/worker');
+const emitLog = require('./lib/emit_log');
+const receiveLogs = require('./lib/receive_logs');
 
-const queueName = Object.freeze('task_queue');
+const message = process.argv.slice(3).join(' ') || 'Hello World!';
 
 // Commands.
 switch (process.argv[2]) {
   case 'task':
-    task(queueName, process.argv.slice(3).join(' ') || 'Hello World!');
+    task('task_queue', message);
     break;
 
   case 'worker':
-    worker(queueName);
+    worker('task_queue');
+    break;
+
+  case 'emit_log':
+    emitLog(message);
+    break;
+
+  case 'receive_logs':
+    receiveLogs();
     break;
 
   default:
