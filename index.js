@@ -6,38 +6,19 @@ if (process.version.split('.')[0].replace('v', '') < 6) {
   process.exit(1);
 }
 
-const amqp = require('amqplib/callback_api');
+const task = require('./lib/task');
+const worker = require('./lib/worker');
+
+const queueName = Object.freeze('task_queue');
 
 // Commands.
 switch (process.argv[2]) {
-  case 'send':
-    amqp.connect('amqp://localhost', (err, conn) => {
-      conn.createChannel((err, ch) => {
-        const q = 'hello';
-        const msg = 'Hello World!';
-
-        ch.assertQueue(q, { durable: false });
-        ch.sendToQueue(q, Buffer.from(msg));
-        console.log(' [x] Sent %s', msg);
-      });
-      setTimeout(() => {
-        conn.close(); process.exit(0);
-      }, 500);
-    });
+  case 'task':
+    task(queueName, process.argv.slice(3).join(' ') || 'Hello World!');
     break;
 
-  case 'receive':
-    amqp.connect('amqp://localhost', (err, conn) => {
-      conn.createChannel((err, ch) => {
-        const q = 'hello';
-
-        ch.assertQueue(q, { durable: false });
-        console.log(' [*] Waiting for messages in %s. To exit press CTRL+C', q);
-        ch.consume(q, (msg) => {
-          console.log(' [x] Received %s', msg.content.toString());
-        }, { noAck: true });
-      });
-    });
+  case 'worker':
+    worker(queueName);
     break;
 
   default:

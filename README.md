@@ -13,18 +13,24 @@ brew install rabbitmq
 rabbitmq-server
 ```
 
-The RabbitMQ Management Plugin will be at http://localhost:15672 (login/pass `guest`).
+The RabbitMQ Management Plugin will be at [http://localhost:15672](http://localhost:15672), login/pass `guest`.
 
 ## Usage
 
-Send messages to the queue:
+Create tasks:
 
 ```bash
-./index.js send
+./index.js task
 ```
 
-Recieve messages from the queue:
+Create multiple tasks:
 
 ```bash
-./index.js recieve
+for i in {1..10}; do ./index.js task Message $i to be consumed; done
+```
+
+Start worker:
+
+```bash
+./index.js worker
 ```
